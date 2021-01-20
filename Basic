@@ -1,0 +1,129 @@
+
+-- Selecting, ltering, and grouping data
+SELECT user_id, SUM(sales)
+FROM sales_data
+WHERE user_id BETWEEN 300 AND 400
+GROUP BY user_id;
+Using joins
+
+
+SELECT c.country, c.team, SUM(m.goals)
+FROM countries AS c
+LEFT JOIN matches AS m
+ON c.team_id = m.home_team_id
+WHERE m.year > 1990
+GROUP BY c.country, c.team;
+
+
+-- CASE WHEN
+
+CASE WHEN x = 1 THEN 'a'
+WHEN x = 2 THEN 'b'
+ELSE 'c' END AS new_column
+
+-- CASE WHEN with COUNT
+
+SELECT
+season,
+COUNT(CASE WHEN hometeam_id = 8650
+AND home_goal > away_goal
+THEN id END) AS home_wins
+FROM match
+GROUP BY season;
+
+-- CASE WHEN with COUNT
+
+SELECT
+season,
+COUNT(CASE WHEN hometeam_id = 8650 AND home_goal > away_goal
+THEN id END) AS home_wins,
+COUNT(CASE WHEN awayteam_id = 8650 AND away_goal > home_goal
+THEN id END) AS away_wins
+FROM match
+GROUP BY season;
+
+-- CASE WHEN with SUM
+SELECT
+season,
+SUM(CASE WHEN hometeam_id = 8650
+THEN home_goal END) AS home_goals,
+SUM(CASE WHEN awayteam_id = 8650
+THEN away_goal END) AS away_goals
+FROM match
+GROUP BY season;
+
+-- The CASE is fairly AVG...
+SELECT
+season,
+AVG(CASE WHEN hometeam_id = 8650
+THEN home_goal END) AS home_goals,
+AVG(CASE WHEN awayteam_id = 8650
+THEN away_goal END) AS away_goals
+FROM match
+GROUP BY season;
+
+--A ROUNDed AVG
+ROUND(3.141592653589,2)
+
+
+-- A ROUNDed AVG
+SELECT
+season,
+ROUND(AVG(CASE WHEN hometeam_id = 8650
+THEN home_goal END),2) AS home_goals,
+ROUND(AVG(CASE WHEN awayteam_id = 8650
+THEN away_goal END),2) AS away_goals
+FROM match
+GROUP BY season;
+
+-- Percentages with CASE and AVG
+SELECT
+season,
+AVG(CASE WHEN hometeam_id = 8455 AND home_goal > away_goal THEN 1
+WHEN hometeam_id = 8455 AND home_goal < away_goal THEN 0
+END) AS pct_homewins,
+AVG(CASE WHEN awayteam_id = 8455 AND away_goal > home_goal THEN 1
+WHEN awayteam_id = 8455 AND away_goal < home_goal THEN 0
+END) AS pct_awaywins
+FROM match
+GROUP BY season;
+
+--Percentages with CASE and AVG
+SELECT
+season,
+ROUND(AVG(CASE WHEN hometeam_id = 8455 AND home_goal > away_goal THEN 1
+WHEN hometeam_id = 8455 AND home_goal < away_goal THEN 0
+END),2) AS pct_homewins,
+ROUND(AVG(CASE WHEN awayteam_id = 8455 AND away_goal > home_goal THEN 1
+WHEN awayteam_id = 8455 AND away_goal < home_goal THEN 0
+END),2) AS pct_awaywins
+FROM match
+GROUP BY season;
+
+--Create Table
+CREATE TABLE professors (
+ firstname text, -- Text Type
+ lastname text -- Text Type
+);
+
+-- Mod TABLE - Rename COLUMN
+ALTER TABLE affiliations
+RENAME COLUMN Old TO NEW;
+
+
+-- Mod TABLE - DROP COLUMN
+ALTER TABLE affiliations
+DROP COLUMN Old;
+
+
+-- Mod TABLE - INSERT COLUMN
+INSERT INTO affiliations
+SELECT *
+FROM professors;
+
+
+-- Mod TABLE - Delte TABLE
+DROP TABLE  affiliations
+
+
+-- Add
